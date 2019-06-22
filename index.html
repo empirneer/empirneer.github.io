@@ -19,7 +19,7 @@
     <script> 
         
         var c = document.getElementById("myCanvas");
-        var ctx=c.getContext("2d", {alpha: false});
+        var ctx=c.getContext("2d", {alpha: true});
         c.width  = window.innerWidth;
         c.height = window.innerHeight;
         var keys = {};
@@ -119,20 +119,45 @@
         }
         
         function drawplayers() {
-            // main
-            ctx.fillStyle = "blue";
-            ctx.fillRect(gx(xpos)-gz(10),gy(ypos)-gz(10),gz(20),gz(20));
+            // draw strokes
+            ctx.lineWidth = gz(2);
             
-            // others
-            ctx.fillStyle = "red";
+            ctx.strokeStyle = "red";
             for (var i = 0; i<playersname.length; i++) {
-                ctx.fillRect(gx(playersx[i])-gz(10),gy(playersy[i])-gz(10),gz(20),gz(20));
+                ctx.beginPath();
+                ctx.arc(gx(playersx[i]), gy(playersy[i]), gz(40), 0, 2 * Math.PI);
+                ctx.closePath();
+                ctx.stroke();
             }
+            
+            ctx.strokeStyle = "blue";
+            ctx.beginPath();
+            ctx.arc(gx(xpos), gy(ypos), gz(40), 0, 2 * Math.PI);
+            ctx.closePath();
+            ctx.stroke();
+            
+            // fill
+            ctx.lineWidth = gz(2);
+            
+            ctx.fillStyle = "black";
+            for (var i = 0; i<playersname.length; i++) {
+                ctx.beginPath();
+                ctx.arc(gx(playersx[i]), gy(playersy[i]), gz(40), 0, 2 * Math.PI);
+                ctx.closePath();
+                ctx.fill();
+            }
+            
+            ctx.beginPath();
+            ctx.arc(gx(xpos), gy(ypos), gz(40), 0, 2 * Math.PI);
+            ctx.closePath();
+            ctx.fill();
         }
         
         function step() {
             try {
                 ctx.clearRect(0,0,c.width,c.height);
+                ctx.fillStyle = "black";
+                ctx.fillRect(0,0,c.width,c.height);
                 controls();
                 drawplayers();
             }
