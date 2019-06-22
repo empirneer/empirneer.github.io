@@ -83,8 +83,8 @@
             } 
         }); 
         
-        function gx(x_) {return c.width/2+(x_/1000*(c.width/2))}
-        function gy(y_) {return c.height/2-(y_/1000*(c.width/2))}
+        function gx(x_) {return (c.width/2)+(x_/1000*(c.width/2))}
+        function gy(y_) {return (c.height/2)-(y_/1000*(c.width/2))}
         function gz(z_) {return (z_/1000*(c.width/2))}
         
         function controls() {
@@ -107,9 +107,11 @@
         }
         
         function step() {
-            ctx.clearRect(0,0,c.width,c.height);
-            controls();
-            drawplayers();
+            try {
+                ctx.clearRect(0,0,c.width,c.height);
+                controls();
+                drawplayers();
+            catch(err) {alert(err)}
             window.requestAnimationFrame(step);
         }
         
