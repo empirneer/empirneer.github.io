@@ -14,7 +14,6 @@
     <body> 
         <canvas id="myCanvas"></canvas>
     </body> 
-
     <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.21.7.min.js"></script> 
     <script> 
         
@@ -33,6 +32,8 @@
         var playersname = [];
         var playersx = [];
         var playersy = [];
+        var playersdx = []; // display x
+        var playersdy = []; // display y
         
         const pubnub = new PubNub({
             publishKey : "pub-c-b2010787-f12b-462f-86c3-63893939f846",
@@ -71,6 +72,8 @@
                         playersname.push(event.message[1]);
                         playersx.push(event.message[2]);
                         playersy.push(event.message[3]);
+                        playersdx.push(event.message[2]);
+                        playersdy.push(event.message[3]);
                     }
                     
                     // if creating
@@ -79,6 +82,8 @@
                         playersname.push(event.message[2]);
                         playersx.push(event.message[3]);
                         playersy.push(event.message[4]);
+                        playersdx.push(event.message[3]);
+                        playersdy.push(event.message[4]);
                         
                     }
                     
@@ -125,7 +130,7 @@
             ctx.strokeStyle = "red";
             for (var i = 0; i<playersname.length; i++) {
                 ctx.beginPath();
-                ctx.arc(gx(playersx[i]), gy(playersy[i]), gz(40), 0, 2 * Math.PI);
+                ctx.arc(gx(playersdx[i]), gy(playersdy[i]), gz(40), 0, 2 * Math.PI);
                 ctx.closePath();
                 ctx.stroke();
             }
@@ -142,7 +147,7 @@
             ctx.fillStyle = "black";
             for (var i = 0; i<playersname.length; i++) {
                 ctx.beginPath();
-                ctx.arc(gx(playersx[i]), gy(playersy[i]), gz(40), 0, 2 * Math.PI);
+                ctx.arc(gx(playersdx[i]), gy(playersdy[i]), gz(40), 0, 2 * Math.PI);
                 ctx.closePath();
                 ctx.fill();
             }
@@ -153,12 +158,21 @@
             ctx.fill();
         }
         
+        function updatedisplay() {
+            // movement smoothing
+            for (var i = 0;i<playersx.length;i++) {
+                playersdx[i] = Math.round(playersdx[i]+((playersx[i]-playersdx[i])/3));
+                playersdy[i] = Math.round(playersdx[i]+((playersx[i]-playersdx[i])/3));
+            }
+        }
+        
         function step() {
             try {
                 ctx.clearRect(0,0,c.width,c.height);
                 ctx.fillStyle = "black";
                 ctx.fillRect(0,0,c.width,c.height);
                 controls();
+                updatedisplay();
                 drawplayers();
             }
             catch(err) {alert(err)}
@@ -168,5 +182,5 @@
         window.setInterval(updatepos, 100);
         window.requestAnimationFrame(step);
 
-</script> 
+    </script> 
 </html>
