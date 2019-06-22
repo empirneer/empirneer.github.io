@@ -84,14 +84,14 @@
         }); 
         
         function gx(x_) {return c.width/2+(x_/1000*(c.width/2))}
-        function gy(y_) {return c.height/2+(y_/1000*(c.width/2))}
+        function gy(y_) {return c.height/2-(y_/1000*(c.width/2))}
         function gz(z_) {return (z_/1000*(c.width/2))}
         
         function controls() {
-            if (keys["38"]) {ypos+=2} // Up
-            if (keys["40"]) {ypos-=2} // Down
-            if (keys["37"]) {xpos-=2} // Left
-            if (keys["39"]) {xpos+=2} // Right
+            if (keys["38"]) {ypos+=4} // Up
+            if (keys["40"]) {ypos-=4} // Down
+            if (keys["37"]) {xpos-=4} // Left
+            if (keys["39"]) {xpos+=4} // Right
         }
         
         function drawplayers() {
