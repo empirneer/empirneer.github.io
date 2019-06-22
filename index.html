@@ -21,6 +21,9 @@
         var ctx=c.getContext("2d", {alpha: false});
         c.width  = window.innerWidth;
         c.height = window.innerHeight;
+        var keys = {};
+        window.onkeyup = function(e) { keys[e.keyCode] = false; }
+        window.onkeydown = function(e) { keys[e.keyCode] = true; }
         
         var myname = "bird" + Math.round(Math.random()*100000);
         var xpos = Math.round(Math.random()*2000)-1000;
