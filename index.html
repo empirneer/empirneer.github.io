@@ -39,3 +39,48 @@
  }); 
 </script> 
 </html>
+
+<!DOCTYPE html> 
+<html> 
+    <head> 
+        <title>Game</title> 
+    </head> 
+    
+    <body> 
+        <textarea placeholder="Chat here"></textarea>
+        <input id="chat-publish" type="submit" value="Click here to Publish"/> 
+    </body> 
+
+    <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.21.7.min.js"></script> 
+    <script> 
+    
+    const pubnub = new PubNub({
+        publishKey : "pub-c-b2010787-f12b-462f-86c3-63893939f846",
+        subscribeKey : "sub-c-1a504e2e-949e-11e9-a293-62d4500be10d"
+    }); 
+
+    const button = document.getElementById('chat-publish');
+
+    button.addEventListener('click', () => { 
+        pubnub.publish({
+            channel : "gamechat", 
+            message : document.getElementById("chat-publish").value
+        }, function(status, response) { 
+            //Handle error here 
+        });
+    });
+
+    pubnub.subscribe({
+        channels: ['gamechat']
+    }); 
+    
+    pubnub.addListener({
+        message: function(event) {
+            let pElement = document.createElement('p'); 
+            pElement.appendChild(document.createTextNode(event.message)); 
+            document.body.appendChild(pElement); 
+        } 
+    }); 
+
+</script> 
+</html>
