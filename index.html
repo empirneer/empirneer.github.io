@@ -107,6 +107,7 @@
             ctx.clearRect(0,0,c.width,c.height);
             controls();
             drawplayers();
+            window.requestAnimationFrame(step);
         }
         
         window.requestAnimationFrame(step);
