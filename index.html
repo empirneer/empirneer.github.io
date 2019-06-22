@@ -28,7 +28,7 @@
         
         var myname = "bird" + Math.round(Math.random()*100000);
         var xpos = Math.round(Math.random()*2000)-1000;
-        var ypos = Math.round(Math.random()*2000)-1000;
+        var ypos = Math.round(Math.random()*1000)-500;
         
         var playersname = [];
         var playersx = [];
@@ -140,7 +140,7 @@
             window.requestAnimationFrame(step);
         }
         
-        window.setInterval(updatepos, 200);
+        window.setInterval(updatepos, 100);
         window.requestAnimationFrame(step);
 
 </script> 
