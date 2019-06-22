@@ -113,7 +113,9 @@
                             // ghost player (still in setup)
                         }
                     }
-                    if (event.message[0] == 'active' event.message[1] == myname) {myactive = new Date()}
+                    if (event.message[0] == 'active' event.message[1] == myname) {
+                        myactive = new Date()
+                    }
                     
                 }
             } 
@@ -217,7 +219,7 @@
         }
         
         function step() {
-            
+            try {
             c.width  = window.innerWidth;
             c.height = window.innerHeight;
             
@@ -228,6 +230,7 @@
             updatedisplay();
             drawplayers();
             testplayeractive()
+            } catch(err) {alert(err)}
             
             window.requestAnimationFrame(step);
         }
