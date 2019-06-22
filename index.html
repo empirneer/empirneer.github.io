@@ -2,7 +2,8 @@
 <!DOCTYPE html> 
 <html> 
     <head> 
-        <title>Game</title> 
+        <title>empirneer</title> 
+        <META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE"> 
         <style>
             body {
                 margin:0px;
@@ -55,6 +56,9 @@
             message: function(event) {
                 
                 if (event.channel == 'game') {
+                    
+                    // if create
+                    
                     if (event.message[0] == 'create' && event.message[1] != myname) {
                         // respond to create
                         pubnub.publish({
@@ -69,6 +73,8 @@
                         playersy.push(event.message[3]);
                     }
                     
+                    // if creating
+                    
                     if (event.message[0] == 'create_response' && event.message[1] == myname) {
                         playersname.push(event.message[2]);
                         playersx.push(event.message[3]);
@@ -76,12 +82,30 @@
                         
                     }
                     
+                    // movement
+                    
+                    if (event.message[0] == 'move' && event.message[1] != myname) {
+                        try {
+                            var indexr = playersname.indexOf(event.message[1]);
+                            playersx[indexr] = event.message[2];
+                            playersy[indexr] = event.message[3];
+                        } catch(err) {
+                            // ghost player
+                        }
+                    }
+                    
                 }
-                //let pElement = document.createElement('p'); 
-                //pElement.appendChild(document.createTextNode(event.channel+": "+event.message)); 
-                //document.getElementById("stream").appendChild(pElement); 
             } 
         }); 
+        
+        function updatepos() {
+            pubnub.publish({
+                channel : "game", 
+                message : ['move',myname,xpos,ypos]
+            }, function(status, response) { 
+                //Handle error here 
+            });
+        }
         
         function gx(x_) {return (c.width/2)+(x_/1000*(c.width/2))}
         function gy(y_) {return (c.height/2)-(y_/1000*(c.width/2))}
@@ -116,6 +140,7 @@
             window.requestAnimationFrame(step);
         }
         
+        setInterval(updatepos(), 500);
         window.requestAnimationFrame(step);
 
 </script> 
