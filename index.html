@@ -161,21 +161,31 @@
         function updatedisplay() {
             // movement smoothing
             for (var i = 0;i<playersx.length;i++) {
-                playersdx[i] = Math.round(playersdx[i]+((playersx[i]-playersdx[i])/3));
-                playersdy[i] = Math.round(playersdy[i]+((playersy[i]-playersdy[i])/3));
+                
+                if (Math.sqrt(((playersdx[i]-playersx[i])*(playersdx[i]-playersx[i])) + ((playersdy[i]-playersy[i])*(playersdy[i]-playersy[i]))) > 25) {
+                    // back-glitching
+                    playersdx[i] = Math.round(playersdx[i]+((playersx[i]-playersdx[i])/20));
+                    playersdy[i] = Math.round(playersdy[i]+((playersy[i]-playersdy[i])/20));
+                } 
+                else {
+                    playersdx[i] = Math.round(playersdx[i]+((playersx[i]-playersdx[i])/5));
+                    playersdy[i] = Math.round(playersdy[i]+((playersy[i]-playersdy[i])/5));
+                }
             }
         }
         
         function step() {
-            try {
-                ctx.clearRect(0,0,c.width,c.height);
-                ctx.fillStyle = "black";
-                ctx.fillRect(0,0,c.width,c.height);
-                controls();
-                updatedisplay();
-                drawplayers();
-            }
-            catch(err) {alert(err)}
+            
+            c.width  = window.innerWidth;
+            c.height = window.innerHeight;
+            
+            ctx.clearRect(0,0,c.width,c.height);
+            ctx.fillStyle = "black";
+            ctx.fillRect(0,0,c.width,c.height);
+            controls();
+            updatedisplay();
+            drawplayers();
+            
             window.requestAnimationFrame(step);
         }
         
