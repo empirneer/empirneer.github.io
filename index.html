@@ -3,11 +3,21 @@
 <html> 
     <head> 
         <title>Game</title> 
+        <style>
+            #stream {
+                height:200px;
+                width:200px;
+                y-overflow:scroll;
+            }
+        </style>
     </head> 
     
     <body> 
-        <textarea placeholder="Chat here"></textarea>
-        <input id="chat-publish" type="submit" value="Click here to Publish"/> 
+        <div id="chat">
+            <div id="stream">
+            <textarea placeholder="Chat here" id="chat-message" maxlength="50"></textarea>
+            <input id="chat-publish" type="submit" value="Send"/> 
+        </div>
     </body> 
 
     <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.21.7.min.js"></script> 
@@ -23,7 +33,7 @@
     button.addEventListener('click', () => { 
         pubnub.publish({
             channel : "gamechat", 
-            message : document.getElementById("chat-publish").value
+            message : document.getElementById("chat-message").value
         }, function(status, response) { 
             //Handle error here 
         });
@@ -37,7 +47,7 @@
         message: function(event) {
             let pElement = document.createElement('p'); 
             pElement.appendChild(document.createTextNode(event.message)); 
-            document.body.appendChild(pElement); 
+            document.getElementById("stream").appendChild(pElement); 
         } 
     }); 
 
