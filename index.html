@@ -13,43 +13,69 @@
     </head> 
     
     <body> 
-        <div id="chat">
-            <div id="stream"></div>
-            <textarea placeholder="Chat here" id="chat-message" maxlength="50"></textarea>
-            <input id="chat-publish" type="submit" value="Send"/> 
-        </div>
+        <canvas></canvas>
     </body> 
 
     <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.21.7.min.js"></script> 
     <script> 
-    
-    const pubnub = new PubNub({
-        publishKey : "pub-c-b2010787-f12b-462f-86c3-63893939f846",
-        subscribeKey : "sub-c-1a504e2e-949e-11e9-a293-62d4500be10d"
-    }); 
-
-    const button = document.getElementById('chat-publish');
-
-    button.addEventListener('click', () => { 
+        
+        var myname = "bird" + Math.round(Math.random()*100000);
+        var xpos = Math.round(Math.random()*2000)-1000;
+        var ypos = Math.round(Math.random()*2000)-1000;
+        
+        var playersname = [];
+        var playersx = [];
+        var playersy = [];
+        
+        const pubnub = new PubNub({
+            publishKey : "pub-c-b2010787-f12b-462f-86c3-63893939f846",
+            subscribeKey : "sub-c-1a504e2e-949e-11e9-a293-62d4500be10d"
+        }); 
+        
+        const button = document.getElementById('chat-publish');
+        
+        pubnub.subscribe({
+            channels: ['game']
+        }); 
+        
         pubnub.publish({
-            channel : "gamechat", 
-            message : document.getElementById("chat-message").value
+            channel : "game", 
+            message : ['create',myname,xpos,ypos]
         }, function(status, response) { 
             //Handle error here 
         });
-    });
-
-    pubnub.subscribe({
-        channels: ['gamechat']
-    }); 
-    
-    pubnub.addListener({
-        message: function(event) {
-            let pElement = document.createElement('p'); 
-            pElement.appendChild(document.createTextNode(event.channel+": "+event.message)); 
-            document.getElementById("stream").appendChild(pElement); 
-        } 
-    }); 
+        
+        pubnub.addListener({
+            message: function(event) {
+                
+                if (event.channel == 'game') {
+                    if (event.message[0] == 'create' && event.message[1] != myname) {
+                        // respond to create
+                        pubnub.publish({
+                            channel : "game", 
+                            message : ["create_response",event.message[1],myname,xpos,ypos]
+                        }, function(status, response) { 
+                            //Handle error here 
+                        });
+                        
+                        playersname.push(event.message[1]);
+                        playersx.push(event.message[2]);
+                        playersy.push(event.message[3]);
+                    }
+                    
+                    if (event.message[0] == 'create_response' && event.message[1] == myname) {
+                        playersname.push(event.message[2]);
+                        playersx.push(event.message[3]);
+                        playersy.push(event.message[4]);
+                        
+                    }
+                    
+                }
+                //let pElement = document.createElement('p'); 
+                //pElement.appendChild(document.createTextNode(event.channel+": "+event.message)); 
+                //document.getElementById("stream").appendChild(pElement); 
+            } 
+        }); 
 
 </script> 
 </html>
