@@ -46,7 +46,7 @@
     pubnub.addListener({
         message: function(event) {
             let pElement = document.createElement('p'); 
-            pElement.appendChild(document.createTextNode(event.message)); 
+            pElement.appendChild(document.createTextNode(event.channel+": "+event.message)); 
             document.getElementById("stream").appendChild(pElement); 
         } 
     }); 
