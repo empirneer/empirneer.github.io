@@ -4,10 +4,8 @@
     <head> 
         <title>Game</title> 
         <style>
-            #stream {
-                height:200px;
-                width:200px;
-                overflow-y:scroll;
+            body {
+                margin:0;
             }
         </style>
     </head> 
@@ -18,6 +16,11 @@
 
     <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.21.7.min.js"></script> 
     <script> 
+        
+        var c = document.getElementById("myCanvas");
+        var ctx=c.getContext("2d", {alpha: false});
+        c.width  = window.innerWidth;
+        c.height = window.innerHeight;
         
         var myname = "bird" + Math.round(Math.random()*100000);
         var xpos = Math.round(Math.random()*2000)-1000;
@@ -76,6 +79,37 @@
                 //document.getElementById("stream").appendChild(pElement); 
             } 
         }); 
+        
+        function gx(x_) {return c.width/2+(x_/1000*(c.width/2))}
+        function gy(y_) {return c.height/2+(y_/1000*(c.width/2))}
+        function gz(z_) {return (z_/1000*(c.width/2))}
+        
+        function controls() {
+            if (keys["38"]) {ypos+=2} // Up
+            if (keys["40"]) {ypos-=2} // Down
+            if (keys["37"]) {xpos-=2} // Left
+            if (keys["39"]) {xpos+=2} // Right
+        }
+        
+        function drawplayers() {
+            // main
+            ctx.fillStyle = "blue";
+            ctx.fillRect(gx(xpos)-gz(10),gy(ypos)-gz(10),gz(20),gz(20));
+            
+            // others
+            ctx.fillStyle = "red";
+            for (var i = 0; i<playersname.length; i++) {
+                ctx.fillRect(gx(playersx[i])-gz(10),gy(playersy[i])-gz(10),gz(20),gz(20));
+            }
+        }
+        
+        function step() {
+            ctx.clearRect(0,0,c.width,c.height);
+            controls();
+            drawplayers();
+        }
+        
+        window.requestAnimationFrame(step);
 
 </script> 
 </html>
