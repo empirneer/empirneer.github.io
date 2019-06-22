@@ -32,6 +32,7 @@
         var playersname = [];
         var playersx = [];
         var playersy = [];
+        var playersactive = [];
         var playersdx = []; // display x
         var playersdy = []; // display y
         
@@ -74,6 +75,7 @@
                         playersy.push(event.message[3]);
                         playersdx.push(event.message[2]); // display
                         playersdy.push(event.message[3]);
+                        playersactive.push(new Date());
                     }
                     
                     // if creating
@@ -84,6 +86,7 @@
                         playersy.push(event.message[4]);
                         playersdx.push(event.message[3]); // display
                         playersdy.push(event.message[4]);
+                        playersactive.push(new Date());
                         
                     }
                     
@@ -95,7 +98,18 @@
                             playersx[indexr] = event.message[2];
                             playersy[indexr] = event.message[3];
                         } catch(err) {
-                            // ghost player
+                            // ghost player (still in setup)
+                        }
+                    }
+                    
+                    // active player
+                    
+                    if (event.message[0] == 'active' event.message[1] != myname) {
+                        try {
+                            var indexr = playersname.indexOf(event.message[1]);
+                            playersactive[indexr] = event.message[2];
+                        } catch(err) {
+                            // ghost player (still in setup)
                         }
                     }
                     
@@ -107,6 +121,13 @@
             pubnub.publish({
                 channel : "game", 
                 message : ['move',myname,xpos,ypos]
+            }, function(status, response) { 
+                //Handle error here 
+            });
+            // send "active" report
+            pubnub.publish({
+                channel : "game",
+                message : ['active',myname, new Date()]
             }, function(status, response) { 
                 //Handle error here 
             });
@@ -162,7 +183,7 @@
             // movement smoothing
             for (var i = 0;i<playersx.length;i++) {
                 
-                if (Math.sqrt(((playersdx[i]-playersx[i])*(playersdx[i]-playersx[i])) + ((playersdy[i]-playersy[i])*(playersdy[i]-playersy[i]))) > 25) {
+                if (Math.sqrt(((playersdx[i]-playersx[i])*(playersdx[i]-playersx[i])) + ((playersdy[i]-playersy[i])*(playersdy[i]-playersy[i]))) > 60) {
                     // back-glitching
                     playersdx[i] = Math.round(playersdx[i]+((playersx[i]-playersdx[i])/20));
                     playersdy[i] = Math.round(playersdy[i]+((playersy[i]-playersdy[i])/20));
@@ -170,6 +191,22 @@
                 else {
                     playersdx[i] = Math.round(playersdx[i]+((playersx[i]-playersdx[i])/5));
                     playersdy[i] = Math.round(playersdy[i]+((playersy[i]-playersdy[i])/5));
+                }
+            }
+        }
+        
+        function testplayeractive() {
+            var thisdate = new Date();
+            for (var i = 0;i<playersx.length;i++) {
+                if (thisdate - playersactive[i] > 700) {
+                    // delete
+                    playersx.splice(i,1);
+                    playersy.splice(i,1);
+                    playersdx.splice(i,1);
+                    playersdy.splice(i,1);
+                    playersactive.splice(i,1);
+                    playersname.splice(i,1);
+                    i -= 1;
                 }
             }
         }
@@ -185,6 +222,7 @@
             controls();
             updatedisplay();
             drawplayers();
+            testplayeractive()
             
             window.requestAnimationFrame(step);
         }
