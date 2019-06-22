@@ -162,7 +162,7 @@
             // movement smoothing
             for (var i = 0;i<playersx.length;i++) {
                 playersdx[i] = Math.round(playersdx[i]+((playersx[i]-playersdx[i])/3));
-                playersdy[i] = Math.round(playersdx[i]+((playersx[i]-playersdx[i])/3));
+                playersdy[i] = Math.round(playersdxy[i]+((playersy[i]-playersdy[i])/3));
             }
         }
         
