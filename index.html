@@ -26,6 +26,7 @@
         window.onkeydown = function(e) { keys[e.keyCode] = true; }
         
         var myname = "bird" + Math.round(Math.random()*100000);
+        var myactive = new Date();
         var xpos = Math.round(Math.random()*2000)-1000;
         var ypos = Math.round(Math.random()*1000)-500;
         
@@ -112,6 +113,7 @@
                             // ghost player (still in setup)
                         }
                     }
+                    if (event.message[0] == 'active' event.message[1] == myname) {myactive = new Date()}
                     
                 }
             } 
@@ -197,6 +199,9 @@
         
         function testplayeractive() {
             var thisdate = new Date();
+            if (thisdate-myactive > 700) {
+                // kick self
+            }
             for (var i = 0;i<playersx.length;i++) {
                 if (thisdate - playersactive[i] > 700) {
                     // delete
