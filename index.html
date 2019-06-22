@@ -123,6 +123,7 @@
         }); 
         
         function updatepos() {
+            myreq += 1;
             pubnub.publish({
                 channel : "game", 
                 message : ['move',myname,xpos,ypos]
@@ -201,7 +202,7 @@
         }
         
         function testplayeractive() {
-            myreq += 1;
+            
             var thisdate = myreq;
             if (thisdate-myactive > 20) {
                 // kick self
