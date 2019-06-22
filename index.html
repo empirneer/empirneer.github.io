@@ -26,7 +26,8 @@
         window.onkeydown = function(e) { keys[e.keyCode] = true; }
         
         var myname = "bird" + Math.round(Math.random()*100000);
-        var myactive = new Date();
+        var myactive = 0;
+        var myreq = 0;
         var xpos = Math.round(Math.random()*2000)-1000;
         var ypos = Math.round(Math.random()*1000)-500;
         
@@ -108,13 +109,13 @@
                     if (event.message[0] == 'active' && event.message[1] != myname) {
                         try {
                             var indexr = playersname.indexOf(event.message[1]);
-                            playersactive[indexr] = event.message[2];
+                            playersactive[indexr] = myreq;
                         } catch(err) {
                             // ghost player (still in setup)
                         }
                     }
                     if (event.message[0] == 'active' && event.message[1] == myname) {
-                        myactive = new Date()
+                        myactive = myreq;
                     }
                     
                 }
@@ -200,12 +201,13 @@
         }
         
         function testplayeractive() {
-            var thisdate = new Date();
-            if (thisdate-myactive > 700) {
+            myreq += 1;
+            var thisdate = myreq;
+            if (thisdate-myactive > 20) {
                 // kick self
             }
             for (var i = 0;i<playersx.length;i++) {
-                if (thisdate - playersactive[i] > 700) {
+                if (thisdate - playersactive[i] > 20) {
                     // delete
                     playersx.splice(i,1);
                     playersy.splice(i,1);
