@@ -105,7 +105,7 @@
                     
                     // active player
                     
-                    if (event.message[0] == 'active' event.message[1] != myname) {
+                    if (event.message[0] == 'active' && event.message[1] != myname) {
                         try {
                             var indexr = playersname.indexOf(event.message[1]);
                             playersactive[indexr] = event.message[2];
@@ -113,7 +113,7 @@
                             // ghost player (still in setup)
                         }
                     }
-                    if (event.message[0] == 'active' event.message[1] == myname) {
+                    if (event.message[0] == 'active' && event.message[1] == myname) {
                         myactive = new Date()
                     }
                     
