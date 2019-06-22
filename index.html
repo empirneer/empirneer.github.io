@@ -72,7 +72,7 @@
                         playersname.push(event.message[1]);
                         playersx.push(event.message[2]);
                         playersy.push(event.message[3]);
-                        playersdx.push(event.message[2]);
+                        playersdx.push(event.message[2]); // display
                         playersdy.push(event.message[3]);
                     }
                     
@@ -82,7 +82,7 @@
                         playersname.push(event.message[2]);
                         playersx.push(event.message[3]);
                         playersy.push(event.message[4]);
-                        playersdx.push(event.message[3]);
+                        playersdx.push(event.message[3]); // display
                         playersdy.push(event.message[4]);
                         
                     }
@@ -162,7 +162,7 @@
             // movement smoothing
             for (var i = 0;i<playersx.length;i++) {
                 playersdx[i] = Math.round(playersdx[i]+((playersx[i]-playersdx[i])/3));
-                playersdy[i] = Math.round(playersdxy[i]+((playersy[i]-playersdy[i])/3));
+                playersdy[i] = Math.round(playersdy[i]+((playersy[i]-playersdy[i])/3));
             }
         }
         
