@@ -12,7 +12,7 @@
     </head> 
     
     <body> 
-        <canvas id="myCanvas"></canvas>
+        <canvas id="myCanvas" onclick="firebullet()"></canvas>
     </body> 
     <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.21.7.min.js"></script> 
     <script> 
@@ -37,6 +37,10 @@
         var playersactive = [];
         var playersdx = []; // display x
         var playersdy = []; // display y
+        
+        var mybulletsx = [];
+        var mybulletsy = [];
+        var mybulletsdir = [];
         
         const pubnub = new PubNub({
             publishKey : "pub-c-b2010787-f12b-462f-86c3-63893939f846",
@@ -122,6 +126,12 @@
             } 
         }); 
         
+        function firebullet() {
+            mybulletsx.push(0);
+            mybulletsy.push(0);
+            mybulletsdir.push(0);
+        }
+        
         function updatepos() {
             myreq += 1;
             pubnub.publish({
@@ -148,6 +158,19 @@
             if (keys["40"]) {ypos-=4} // Down
             if (keys["37"]) {xpos-=4} // Left
             if (keys["39"]) {xpos+=4} // Right
+        }
+        
+        function drawbullets() {
+            // need to implement enemy bullets
+            
+            ctx.lineWidth = gz(3);
+            ctx.strokeStyle = "blue";
+            for (var i = 0; i<mybulletsx.length;i++) {
+                ctx.beginPath();
+                ctx.arc(gx(mybulletsx[i]), gy(mybulletsy[i]), gz(20), 0, 2 * Math.PI);
+                ctx.closePath();
+                ctx.stroke();
+            }
         }
         
         function drawplayers() {
@@ -231,6 +254,7 @@
             ctx.fillRect(0,0,c.width,c.height);
             controls();
             updatedisplay();
+            drawbullets()
             drawplayers();
             testplayeractive()
             } catch(err) {alert(err)}
