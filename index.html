@@ -26,6 +26,7 @@
         window.onkeydown = function(e) { keys[e.keyCode] = true; }
         
         var myname = "bird" + Math.round(Math.random()*100000);
+        var myhealth = 100;
         var myactive = 0;
         var myreq = 0;
         var xpos = Math.round(Math.random()*2000)-1000;
@@ -43,6 +44,7 @@
         var playersactive = [];
         var playersdx = []; // display x
         var playersdy = []; // display y
+        var playershealth = []; // display y
         var playersrecent = []; // get most recent request number so that it cannot act off previous frames
         
         var mybulletsx = [];
@@ -67,7 +69,7 @@
         
         pubnub.publish({
             channel : "game", 
-            message : ['create',myname,xpos,ypos]
+            message : ['create',myname,xpos,ypos,myhealth]
         }, function(status, response) { 
             //Handle error here 
         });
@@ -83,7 +85,7 @@
                         // respond to create
                         pubnub.publish({
                             channel : "game", 
-                            message : ["create_response",event.message[1],myname,xpos,ypos]
+                            message : ["create_response",event.message[1],myname,xpos,ypos,myhealth]
                         }, function(status, response) { 
                             //Handle error here 
                         });
@@ -94,6 +96,7 @@
                         playersdx.push(event.message[2]); // display
                         playersdy.push(event.message[3]);
                         playersactive.push(myreq);
+                        playershealth.push(event.message[4]);
                         playersrecent.push(0);
                     }
                     
@@ -106,6 +109,7 @@
                         playersdx.push(event.message[3]); // display
                         playersdy.push(event.message[4]);
                         playersactive.push(myreq);
+                        playershealth.push(event.message[5]);
                         playersrecent.push(0);
                         
                     }
@@ -144,6 +148,18 @@
                         playersbulletsy.push(event.message[3]);
                         playersbulletsdir.push(event.message[4]);
                         playersbulletsname.push(event.message[1]);
+                    }
+                    
+                    if (event.message[0] == 'death' && event.message[1] != myname) {
+                        var indexr = playersname.indexOf(event.message[1]);
+                        playersx.splice(indexr,1);
+                        playersy.splice(indexr,1);
+                        playersdx.splice(indexr,1);
+                        playersdy.splice(indexr,1);
+                        playersactive.splice(indexr,1);
+                        playersname.splice(indexr,1);
+                        playershealth.splice(indexr,1);
+                        playersrecent.splice(indexr,1);
                     }
                     
                 }
@@ -255,6 +271,14 @@
             ctx.arc(gx(xpos), gy(ypos), gz(40), 0, 2 * Math.PI);
             ctx.closePath();
             ctx.fill();
+            
+            // draw health
+            ctx.strokeStyle = "blue";
+            ctx.beginPath();
+            ctx.moveTo(gx(xpos-50),gy(ypos+20));
+            ctx.lineTo(gx(xpos-50+myhealth),gy(ypos+20));
+            ctx.closePath();
+            ctx.stroke();
         }
         
         function updatedisplay() {
@@ -288,6 +312,8 @@
                     playersdy.splice(i,1);
                     playersactive.splice(i,1);
                     playersname.splice(i,1);
+                    playershealth.splice(i,1);
+                    playersrecent.splice(i,1);
                     i -= 1;
                 }
             }
@@ -302,6 +328,18 @@
             for (var i = 0; i<playersbulletsx.length; i++) {
                 playersbulletsx[i] += (400*Math.sin((playersbulletsdir[i]/360)*2*Math.PI))/fps;
                 playersbulletsy[i] += (400*Math.cos((playersbulletsdir[i]/360)*2*Math.PI))/fps;
+                if (Math.sqrt((xpos-playersbulletsx[i])*(xpos-playersbulletsx[i]) + (ypos-playersbulletsy[i])*(ypos-playersbulletsy[i])) < 40) {
+                    myhealth -= 3;
+                }
+            }
+            
+            if (myhealth < 1) {
+                pubnub.publish({
+                    channel : "game", 
+                    message : ['death',myname]
+                }, function(status, response) { 
+                    //Handle error here 
+                });
             }
         }
         
