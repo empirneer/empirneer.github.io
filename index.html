@@ -25,7 +25,8 @@
         window.onkeyup = function(e) { keys[e.keyCode] = false; }
         window.onkeydown = function(e) { keys[e.keyCode] = true; }
         
-        var myname = "bird" + Math.round(Math.random()*100000);
+        var myid = Math.round(Math.random()*100000);
+        var myname = "bird" + myid;
         var myhealth = 100;
         var myactive = 0;
         var myreq = 0;
@@ -84,6 +85,7 @@
                     if (event.message[0] == 'create' && event.message[1] != myname) {
                         // respond to create
                         pubnub.publish({
+                            message_id: myid,
                             channel : "game", 
                             message : ["create_response",event.message[1],myname,xpos,ypos,myhealth]
                         }, function(status, response) { 
@@ -175,6 +177,7 @@
             
             // send request
             pubnub.publish({
+                message_id: myid,
                 channel : "game", 
                 message : ['bullet',myname,xpos,ypos,dir_]
             }, function(status, response) { 
@@ -190,6 +193,7 @@
         function updatepos() {
             myreq += 1;
             pubnub.publish({
+                message_id: myid,
                 channel : "game", 
                 message : ['move',myname,xpos,ypos,myreq]
             }, function(status, response) { 
@@ -197,6 +201,7 @@
             });
             // send "active" report
             pubnub.publish({
+                message_id: myid,
                 channel : "game",
                 message : ['active',myname, new Date()]
             }, function(status, response) { 
@@ -350,6 +355,7 @@
             
             if (myhealth < 1) {
                 pubnub.publish({
+                    message_id: myid,
                     channel : "game", 
                     message : ['death',myname]
                 }, function(status, response) { 
