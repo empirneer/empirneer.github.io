@@ -132,8 +132,8 @@
         function firebullet() {
             var dir_ = ((Math.atan((xmouse-xpos)/(ymouse-ypos)))/(2*Math.PI))*360;
             if ((ymouse-ypos) < 0) {dir_+=180}
-            mybulletsx.push(0);
-            mybulletsy.push(0);
+            mybulletsx.push(xpos);
+            mybulletsy.push(ypos);
             mybulletsdir.push(dir_);
         }
         
