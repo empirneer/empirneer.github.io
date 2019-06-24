@@ -48,6 +48,11 @@
         var mybulletsy = [];
         var mybulletsdir = [];
         
+        var playersbulletsx = [];
+        var playersbulletsy = [];
+        var playersbulletsdir = [];
+        var playersbulletsname = [];
+        
         const pubnub = new PubNub({
             publishKey : "pub-c-b2010787-f12b-462f-86c3-63893939f846",
             subscribeKey : "sub-c-1a504e2e-949e-11e9-a293-62d4500be10d"
@@ -128,6 +133,15 @@
                         myactive = myreq;
                     }
                     
+                    // create bullet
+                    
+                    if (event.message[0] == 'bullet' && event.message[1] != myname) {
+                        playerbulletsx.push(event.message[2]);
+                        playerbulletsy.push(event.message[3]);
+                        playerbulletsdir.push(event.message[4]);
+                        playerbulletsname.push(event.message[1]);
+                    }
+                    
                 }
             } 
         }); 
@@ -138,6 +152,14 @@
             mybulletsx.push(xpos);
             mybulletsy.push(ypos);
             mybulletsdir.push(dir_);
+            
+            // send request
+            pubnub.publish({
+                channel : "game", 
+                message : ['bullet',myname,xpos,ypos,dir_]
+            }, function(status, response) { 
+                //Handle error here 
+            });
         }
         
         function mouseupdate(event) {
@@ -174,13 +196,23 @@
         }
         
         function drawbullets() {
-            // need to implement enemy bullets
+            // draw self
             
             ctx.lineWidth = gz(3);
             ctx.strokeStyle = "blue";
             for (var i = 0; i<mybulletsx.length;i++) {
                 ctx.beginPath();
                 ctx.arc(gx(mybulletsx[i]), gy(mybulletsy[i]), gz(10), 0, 2 * Math.PI);
+                ctx.closePath();
+                ctx.stroke();
+            }
+            
+            // draw others
+            
+            ctx.strokeStyle = "red";
+            for (var i = 0; i<playerbulletsx.length;i++) {
+                ctx.beginPath();
+                ctx.arc(gx(playerbulletsx[i]), gy(playerbulletsy[i]), gz(10), 0, 2 * Math.PI);
                 ctx.closePath();
                 ctx.stroke();
             }
@@ -259,8 +291,8 @@
         
         function updatebullets() {
             for (var i = 0; i<mybulletsx.length; i++) {
-                mybulletsx[i] += (200*Math.sin((mybulletsdir[i]/360)*2*Math.PI))/fps;
-                mybulletsy[i] += (200*Math.cos((mybulletsdir[i]/360)*2*Math.PI))/fps;
+                mybulletsx[i] += (400*Math.sin((mybulletsdir[i]/360)*2*Math.PI))/fps;
+                mybulletsy[i] += (400*Math.cos((mybulletsdir[i]/360)*2*Math.PI))/fps;
             }
         }
         
