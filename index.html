@@ -34,6 +34,8 @@
         var xmouse = 0;
         var ymouse = 0;
         
+        var fps = 60;
+        
         var playersname = [];
         var playersx = [];
         var playersy = [];
@@ -177,7 +179,7 @@
             ctx.strokeStyle = "blue";
             for (var i = 0; i<mybulletsx.length;i++) {
                 ctx.beginPath();
-                ctx.arc(gx(mybulletsx[i]), gy(mybulletsy[i]), gz(20), 0, 2 * Math.PI);
+                ctx.arc(gx(mybulletsx[i]), gy(mybulletsy[i]), gz(10), 0, 2 * Math.PI);
                 ctx.closePath();
                 ctx.stroke();
             }
@@ -254,7 +256,15 @@
             }
         }
         
+        function updatebullets() {
+            for (var i = 0; i<mybulletsx.length; i++) {
+                mybulletsx[i] += (200*Math.sin((mybulletsdir[i]/360)*2*Math.PI))/fps;
+                mybulletsy[i] += (200*Math.cos((mybulletsdir[i]/360)*2*Math.PI))/fps;
+            }
+        }
+        
         function step() {
+            var oltime = new Date();
             try {
             c.width  = window.innerWidth;
             c.height = window.innerHeight;
@@ -264,10 +274,13 @@
             ctx.fillRect(0,0,c.width,c.height);
             controls();
             updatedisplay();
+            updatebullets();
             drawbullets()
             drawplayers();
             testplayeractive()
             } catch(err) {alert(err)}
+            
+            fps = 1/((new Date()) - oltime);
             
             window.requestAnimationFrame(step);
         }
