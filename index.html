@@ -43,6 +43,7 @@
         var playersactive = [];
         var playersdx = []; // display x
         var playersdy = []; // display y
+        var playersrecent = []; // get most recent request number so that it cannot act off previous frames
         
         var mybulletsx = [];
         var mybulletsy = [];
@@ -92,7 +93,8 @@
                         playersy.push(event.message[3]);
                         playersdx.push(event.message[2]); // display
                         playersdy.push(event.message[3]);
-                        playersactive.push(new Date());
+                        playersactive.push(myreq);
+                        playersrecent.push(0);
                     }
                     
                     // if creating
@@ -103,17 +105,19 @@
                         playersy.push(event.message[4]);
                         playersdx.push(event.message[3]); // display
                         playersdy.push(event.message[4]);
-                        playersactive.push(new Date());
+                        playersactive.push(myreq);
+                        playersrecent.push(0);
                         
                     }
                     
                     // movement
-                    
                     if (event.message[0] == 'move' && event.message[1] != myname) {
                         try {
                             var indexr = playersname.indexOf(event.message[1]);
-                            playersx[indexr] = event.message[2];
-                            playersy[indexr] = event.message[3];
+                            if (event.message[4] > playersrecent[indexr]) {
+                                playersx[indexr] = event.message[2];
+                                playersy[indexr] = event.message[3];
+                            }
                         } catch(err) {
                             // ghost player (still in setup)
                         }
@@ -171,7 +175,7 @@
             myreq += 1;
             pubnub.publish({
                 channel : "game", 
-                message : ['move',myname,xpos,ypos]
+                message : ['move',myname,xpos,ypos,myreq]
             }, function(status, response) { 
                 //Handle error here 
             });
