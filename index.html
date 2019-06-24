@@ -294,6 +294,11 @@
                 mybulletsx[i] += (400*Math.sin((mybulletsdir[i]/360)*2*Math.PI))/fps;
                 mybulletsy[i] += (400*Math.cos((mybulletsdir[i]/360)*2*Math.PI))/fps;
             }
+            
+            for (var i = 0; i<playersbulletsx.length; i++) {
+                playersbulletsx[i] += (400*Math.sin((playersbulletsdir[i]/360)*2*Math.PI))/fps;
+                playersbulletsy[i] += (400*Math.cos((playersbulletsdir[i]/360)*2*Math.PI))/fps;
+            }
         }
         
         function step() {
