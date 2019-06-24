@@ -52,6 +52,7 @@ var playersrecent = []; // get most recent request number so that it cannot act 
         }); 
         
         pubnub.publish({
+            message_id: myid,
             channel : "game", 
             message : ['create',myname,xpos,ypos,myhealth]
         }, function(status, response) { 
