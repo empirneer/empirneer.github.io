@@ -136,10 +136,10 @@
                     // create bullet
                     
                     if (event.message[0] == 'bullet' && event.message[1] != myname) {
-                        playerbulletsx.push(event.message[2]);
-                        playerbulletsy.push(event.message[3]);
-                        playerbulletsdir.push(event.message[4]);
-                        playerbulletsname.push(event.message[1]);
+                        playersbulletsx.push(event.message[2]);
+                        playersbulletsy.push(event.message[3]);
+                        playersbulletsdir.push(event.message[4]);
+                        playersbulletsname.push(event.message[1]);
                     }
                     
                 }
@@ -210,9 +210,9 @@
             // draw others
             
             ctx.strokeStyle = "red";
-            for (var i = 0; i<playerbulletsx.length;i++) {
+            for (var i = 0; i<playersbulletsx.length;i++) {
                 ctx.beginPath();
-                ctx.arc(gx(playerbulletsx[i]), gy(playerbulletsy[i]), gz(10), 0, 2 * Math.PI);
+                ctx.arc(gx(playersbulletsx[i]), gy(playersbulletsy[i]), gz(10), 0, 2 * Math.PI);
                 ctx.closePath();
                 ctx.stroke();
             }
