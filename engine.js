@@ -44,6 +44,16 @@ var playersrecent = []; // get most recent request number so that it cannot act 
             publishKey : "pub-c-b2010787-f12b-462f-86c3-63893939f846",
             subscribeKey : "sub-c-1a504e2e-949e-11e9-a293-62d4500be10d"
         }); 
+
+pubnub.publish({
+            message_id: myid,
+            channel : "game", 
+            message : "Hello",
+            usecase: "update",
+            deleted: false
+        }, function(status, response) { 
+            //Handle error here 
+        });
         
         const button = document.getElementById('chat-publish');
         
@@ -54,7 +64,10 @@ var playersrecent = []; // get most recent request number so that it cannot act 
         pubnub.publish({
             message_id: myid,
             channel : "game", 
-            message : ['create',myname,xpos,ypos,myhealth]
+            message : ['create',myname,xpos,ypos,myhealth],
+            usecase: "update",
+            deleted: false,
+            is_update: true
         }, function(status, response) { 
             //Handle error here 
         });
@@ -71,7 +84,10 @@ var playersrecent = []; // get most recent request number so that it cannot act 
                         pubnub.publish({
                             message_id: myid,
                             channel : "game", 
-                            message : ["create_response",event.message[1],myname,xpos,ypos,myhealth]
+                            message : ["create_response",event.message[1],myname,xpos,ypos,myhealth],
+                            usecase: "update",
+                            deleted: false,
+                            is_update: true
                         }, function(status, response) { 
                             //Handle error here 
                         });
@@ -163,7 +179,10 @@ var playersrecent = []; // get most recent request number so that it cannot act 
             pubnub.publish({
                 message_id: myid,
                 channel : "game", 
-                message : ['bullet',myname,xpos,ypos,dir_]
+                message : ['bullet',myname,xpos,ypos,dir_],
+                usecase: "update",
+                deleted: false,
+                is_update: true
             }, function(status, response) { 
                 //Handle error here 
             });
@@ -179,7 +198,10 @@ var playersrecent = []; // get most recent request number so that it cannot act 
             pubnub.publish({
                 message_id: myid,
                 channel : "game", 
-                message : ['move',myname,xpos,ypos,myreq]
+                message : ['move',myname,xpos,ypos,myreq],
+                usecase: "update",
+                deleted: false,
+                is_update: true
             }, function(status, response) { 
                 //Handle error here 
             });
@@ -187,7 +209,10 @@ var playersrecent = []; // get most recent request number so that it cannot act 
             pubnub.publish({
                 message_id: myid,
                 channel : "game",
-                message : ['active',myname, new Date()]
+                message : ['active',myname, new Date()],
+                usecase: "update",
+                deleted: false,
+                is_update: true
             }, function(status, response) { 
                 //Handle error here 
             });
