@@ -12,7 +12,7 @@
     </head> 
     
     <body> 
-        <canvas id="myCanvas" onclick="firebullet()"></canvas>
+        <canvas id="myCanvas" onclick="firebullet()" onmousemove="mouseupdate(event)"></canvas>
     </body> 
     <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.21.7.min.js"></script> 
     <script> 
@@ -30,6 +30,9 @@
         var myreq = 0;
         var xpos = Math.round(Math.random()*2000)-1000;
         var ypos = Math.round(Math.random()*1000)-500;
+        
+        var xmouse = 0;
+        var ymouse = 0;
         
         var playersname = [];
         var playersx = [];
@@ -127,9 +130,16 @@
         }); 
         
         function firebullet() {
+            var dir_ = ((Math.atan((xmouse-xpos)/(ymouse-ypos)))/(2*Math.PI))*360;
+            if ((ymouse-ypos) < 0) {dir_+=180}
             mybulletsx.push(0);
             mybulletsy.push(0);
-            mybulletsdir.push(0);
+            mybulletsdir.push(dir_);
+        }
+        
+        function mouseupdate(event) {
+            xmouse = ((event.clientX-c.width/2)/(c.width/2))*1000;
+            ymouse = ((-(event.clientY-c.height/2))/(c.width/2))*1000;
         }
         
         function updatepos() {
@@ -262,7 +272,7 @@
             window.requestAnimationFrame(step);
         }
         
-        window.setInterval(updatepos, 100);
+        window.setInterval(updatepos, 150);
         window.requestAnimationFrame(step);
 
     </script> 
