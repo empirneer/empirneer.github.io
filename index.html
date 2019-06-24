@@ -280,7 +280,9 @@
             testplayeractive()
             } catch(err) {alert(err)}
             
-            fps = 1/((new Date()) - oltime);
+            var netime = new Date();
+            
+            fps = 1/((netime - oltime)/1000);
             
             window.requestAnimationFrame(step);
         }
