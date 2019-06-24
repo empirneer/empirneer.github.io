@@ -35,6 +35,7 @@
         var ymouse = 0;
         
         var fps = 60;
+        var netime = new Date();
         
         var playersname = [];
         var playersx = [];
@@ -265,6 +266,9 @@
         
         function step() {
             var oltime = new Date();
+            
+            fps = 1/((oltime-netime)/1000);
+            
             try {
             c.width  = window.innerWidth;
             c.height = window.innerHeight;
@@ -280,9 +284,7 @@
             testplayeractive()
             } catch(err) {alert(err)}
             
-            var netime = new Date();
-            
-            fps = 1/((netime - oltime)/1000);
+            netime = new Date();
             
             window.requestAnimationFrame(step);
         }
