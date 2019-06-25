@@ -117,7 +117,7 @@ pubnub.publish({
                     }
                     
                     // movement
-                    if (event.message[0] == 'move' && event.message[1] != myname) {
+                    if (event.message[0] == 'move' && event.message[1] != myname && playersname.includes(event.message[1])) {
                         try {
                             var indexr = playersname.indexOf(event.message[1]);
                             if (event.message[4] > playersrecent[indexr]) {
@@ -131,7 +131,7 @@ pubnub.publish({
                     
                     // active player
                     
-                    if (event.message[0] == 'active' && event.message[1] != myname) {
+                    if (event.message[0] == 'active' && event.message[1] != myname && playersname.includes(event.message[1])) {
                         try {
                             var indexr = playersname.indexOf(event.message[1]);
                             playersactive[indexr] = myreq;
@@ -139,7 +139,7 @@ pubnub.publish({
                             // ghost player (still in setup)
                         }
                     }
-                    if (event.message[0] == 'active' && event.message[1] == myname) {
+                    if (event.message[0] == 'active' && event.message[1] == myname && playersname.includes(event.message[1])) {
                         myactive = myreq;
                     }
                     
@@ -152,16 +152,18 @@ pubnub.publish({
                         playersbulletsname.push(event.message[1]);
                     }
                     
-                    if (event.message[0] == 'death' && event.message[1] != myname) {
-                        var indexr = playersname.indexOf(event.message[1]);
-                        playersx.splice(indexr,1);
-                        playersy.splice(indexr,1);
-                        playersdx.splice(indexr,1);
-                        playersdy.splice(indexr,1);
-                        playersactive.splice(indexr,1);
-                        playersname.splice(indexr,1);
-                        playershealth.splice(indexr,1);
-                        playersrecent.splice(indexr,1);
+                    if (event.message[0] == 'death' && event.message[1] != myname && playersname.includes(event.message[1])) {
+                        try {
+                            var indexr = playersname.indexOf(event.message[1]);
+                            playersx.splice(indexr,1);
+                            playersy.splice(indexr,1);
+                            playersdx.splice(indexr,1);
+                            playersdy.splice(indexr,1);
+                            playersactive.splice(indexr,1);
+                            playersname.splice(indexr,1);
+                            playershealth.splice(indexr,1);
+                            playersrecent.splice(indexr,1);
+                        } catch(err) {}
                     }
                     
                 }
