@@ -128,7 +128,7 @@ pubnub.publish({
                             if (event.message[4] > playersrecent[indexr]) {
                                 playersx[indexr] = event.message[2];
                                 playersy[indexr] = event.message[3];
-                                playerssize = event.message[4];
+                                playerssize[indexr] = event.message[4];
                             }
                         } catch(err) {
                             // ghost player (still in setup)
@@ -169,6 +169,7 @@ pubnub.publish({
                             playersname.splice(indexr,1);
                             playershealth.splice(indexr,1);
                             playersrecent.splice(indexr,1);
+                            playerssize.splice(indexr,1);
                         } catch(err) {}
                     }
                     
@@ -299,22 +300,22 @@ pubnub.publish({
             ctx.strokeStyle = "blue";
             ctx.lineCap = "round";
             ctx.beginPath();
-            ctx.moveTo(gx(xpos-40),gy(ypos+55));
-            ctx.lineTo(gx(xpos+40),gy(ypos+55));
+            ctx.moveTo(gx(xpos-40),gy(ypos+mysize+15));
+            ctx.lineTo(gx(xpos+40),gy(ypos+mysize+15));
             ctx.stroke();
             ctx.lineWidth = gz(7);
             ctx.strokeStyle = "black";
             ctx.lineCap = "round";
             ctx.beginPath();
-            ctx.moveTo(gx(xpos-40),gy(ypos+55));
-            ctx.lineTo(gx(xpos+40),gy(ypos+55));
+            ctx.moveTo(gx(xpos-40),gy(ypos+mysize+15));
+            ctx.lineTo(gx(xpos+40),gy(ypos+mysize+15));
             ctx.stroke();
             ctx.lineWidth = gz(4);
             ctx.strokeStyle = "blue";
             ctx.lineCap = "round";
             ctx.beginPath();
-            ctx.moveTo(gx(xpos-40),gy(ypos+55));
-            ctx.lineTo(gx(xpos-40+((myhealth/100)*80)),gy(ypos+55));
+            ctx.moveTo(gx(xpos-40),gy(ypos+mysize+15));
+            ctx.lineTo(gx(xpos-40+((myhealth/100)*80)),gy(ypos+mysize+15));
             ctx.stroke();
         }
         
@@ -351,6 +352,7 @@ pubnub.publish({
                     playersname.splice(i,1);
                     playershealth.splice(i,1);
                     playersrecent.splice(i,1);
+                    playerssize.splice(i,1);
                     i -= 1;
                 }
             }
