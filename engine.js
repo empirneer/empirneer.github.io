@@ -128,7 +128,7 @@ pubnub.publish({
                             if (event.message[4] > playersrecent[indexr]) {
                                 playersx[indexr] = event.message[2];
                                 playersy[indexr] = event.message[3];
-                                playerssize[indexr] = event.message[4];
+                                playerssize[indexr] = event.message[5];
                             }
                         } catch(err) {
                             // ghost player (still in setup)
