@@ -50,7 +50,8 @@ pubnub.publish({
             channel : "game", 
             message : "Hello",
             usecase: "update",
-            deleted: false
+            deleted: false,
+            is_update: true
         }, function(status, response) { 
             //Handle error here 
         });
