@@ -267,14 +267,14 @@ pubnub.publish({
             ctx.strokeStyle = "red";
             for (var i = 0; i<playersname.length; i++) {
                 ctx.beginPath();
-                ctx.arc(gx(playersdx[i]), gy(playersdy[i]), gz(40), 0, 2 * Math.PI);
+                ctx.arc(gx(playersdx[i]), gy(playersdy[i]), gz(playerssize[i]), 0, 2 * Math.PI);
                 ctx.closePath();
                 ctx.stroke();
             }
             
             ctx.strokeStyle = "blue";
             ctx.beginPath();
-            ctx.arc(gx(xpos), gy(ypos), gz(40), 0, 2 * Math.PI);
+            ctx.arc(gx(xpos), gy(ypos), gz(mysize), 0, 2 * Math.PI);
             ctx.closePath();
             ctx.stroke();
             
@@ -284,13 +284,13 @@ pubnub.publish({
             ctx.fillStyle = "black";
             for (var i = 0; i<playersname.length; i++) {
                 ctx.beginPath();
-                ctx.arc(gx(playersdx[i]), gy(playersdy[i]), gz(40), 0, 2 * Math.PI);
+                ctx.arc(gx(playersdx[i]), gy(playersdy[i]), gz(playerssize[i]), 0, 2 * Math.PI);
                 ctx.closePath();
                 ctx.fill();
             }
             
             ctx.beginPath();
-            ctx.arc(gx(xpos), gy(ypos), gz(40), 0, 2 * Math.PI);
+            ctx.arc(gx(xpos), gy(ypos), gz(mysize), 0, 2 * Math.PI);
             ctx.closePath();
             ctx.fill();
             
