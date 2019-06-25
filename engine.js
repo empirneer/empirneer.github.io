@@ -366,7 +366,10 @@ pubnub.publish({
                 pubnub.publish({
                     message_id: myid,
                     channel : "game", 
-                    message : ['death',myname]
+                    message : ['death',myname],
+                    usecase: "update",
+                    deleted: false,
+                    is_update: true
                 }, function(status, response) { 
                     //Handle error here 
                 });
