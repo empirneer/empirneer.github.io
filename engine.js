@@ -13,6 +13,7 @@ var myname = "bird" + myid;
 var myhealth = 100;
 var myactive = 0;
 var myreq = 0;
+var mysize = 40;
 var xpos = Math.round(Math.random()*2000)-1000;
 var ypos = Math.round(Math.random()*1000)-500;
 
@@ -23,6 +24,7 @@ var fps = 60;
 var netime = new Date();
 
 var playersname = [];
+var playerssize = [];
 var playersx = [];
 var playersy = [];
 var playersactive = [];
@@ -65,7 +67,7 @@ pubnub.publish({
         pubnub.publish({
             message_id: myid,
             channel : "game", 
-            message : ['create',myname,xpos,ypos,myhealth],
+            message : ['create',myname,xpos,ypos,myhealth,mysize],
             usecase: "update",
             deleted: false,
             is_update: true
@@ -85,7 +87,7 @@ pubnub.publish({
                         pubnub.publish({
                             message_id: myid,
                             channel : "game", 
-                            message : ["create_response",event.message[1],myname,xpos,ypos,myhealth],
+                            message : ["create_response",event.message[1],myname,xpos,ypos,myhealth,mysize],
                             usecase: "update",
                             deleted: false,
                             is_update: true
@@ -101,6 +103,7 @@ pubnub.publish({
                         playersactive.push(myreq);
                         playershealth.push(event.message[4]);
                         playersrecent.push(0);
+                        playerssize.push(event.message[5]);
                     }
                     
                     // if creating
@@ -114,6 +117,7 @@ pubnub.publish({
                         playersactive.push(myreq);
                         playershealth.push(event.message[5]);
                         playersrecent.push(0);
+                        playerssize.push(event.message[6]);
                         
                     }
                     
@@ -124,6 +128,7 @@ pubnub.publish({
                             if (event.message[4] > playersrecent[indexr]) {
                                 playersx[indexr] = event.message[2];
                                 playersy[indexr] = event.message[3];
+                                playerssize = event.message[4];
                             }
                         } catch(err) {
                             // ghost player (still in setup)
@@ -201,7 +206,7 @@ pubnub.publish({
             pubnub.publish({
                 message_id: myid,
                 channel : "game", 
-                message : ['move',myname,xpos,ypos,myreq],
+                message : ['move',myname,xpos,ypos,myreq,mysize],
                 usecase: "update",
                 deleted: false,
                 is_update: true
